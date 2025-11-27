@@ -1,6 +1,9 @@
 #include <iostream>
 #include <raylib.h>
 #include <rlgl.h>
+#include <raymath.h>
+
+#include "viewport.h"
 
 int main() {
 	// Define window dimensions
@@ -14,8 +17,17 @@ int main() {
 	// Load shader
 	Shader shader = LoadShader(NULL, "./shader.fs");
 
+	// Viewport
+	Viewport viewport;
+	viewport.offset = { 300.0f,200.0f };
+	viewport.zoom = 200.0f;
+	viewport.updateRectangle();
+	
 	// Game loop
 	while (!WindowShouldClose()) {
+		viewport.update();
+		Rectangle viewport_rect = viewport.getRectangle();
+
 		BeginDrawing();
 		
 		ClearBackground(RAYWHITE);
@@ -24,10 +36,10 @@ int main() {
 		
 		rlBegin(RL_QUADS);
 		
-		rlTexCoord2f(0.0f, 0.0f); rlVertex2f(0.0f, 0.0f);
-		rlTexCoord2f(0.0f, 1.0f); rlVertex2f(0.0f, window_height);
-		rlTexCoord2f(1.0f, 1.0f); rlVertex2f(window_width, window_height);
-		rlTexCoord2f(1.0f, 0.0f); rlVertex2f(window_width, 0.0f);
+		rlTexCoord2f(viewport_rect.x, viewport_rect.y); rlVertex2f(0.0f, 0.0f);
+		rlTexCoord2f(viewport_rect.x, viewport_rect.y + viewport_rect.height); rlVertex2f(0.0f, window_height);
+		rlTexCoord2f(viewport_rect.x + viewport_rect.width, viewport_rect.y + viewport_rect.height); rlVertex2f(window_width, window_height);
+		rlTexCoord2f(viewport_rect.x + viewport_rect.width, viewport_rect.y); rlVertex2f(window_width, 0.0f);
 
 		EndShaderMode();
 		
