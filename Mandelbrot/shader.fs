@@ -18,11 +18,11 @@ int mandelbrot(vec2 c) {
         if(length(z) > 4) break;
         z = complex_square(z) + c;
     }
-    if(i<40) return 1; // Point is in the mandelbrot set
+    if(i<40) return i; // Point is in the mandelbrot set
     return 0; // Point is not in the mandelbrot set
 }
 
 void main() {
-    float value = mandelbrot(fragTexCoord);
+    float value = mandelbrot(fragTexCoord) / 40.0;
     finalColor = vec4(value,value,value,1.0);
 }
