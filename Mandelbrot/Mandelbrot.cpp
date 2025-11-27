@@ -16,17 +16,26 @@ int main() {
 
 	// Load shader
 	Shader shader = LoadShader(NULL, "./shader.fs");
+	int point_loc = GetShaderLocation(shader, "point");
 
 	// Viewport
 	Viewport viewport;
 	viewport.offset = { 300.0f,200.0f };
 	viewport.zoom = 200.0f;
 	viewport.updateRectangle();
+
+	// Movable point vector
+	Vector2 point = { 0.0f,0.0f };
 	
 	// Game loop
 	while (!WindowShouldClose()) {
 		viewport.update();
 		Rectangle viewport_rect = viewport.getRectangle();
+
+		if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
+			point += viewport.getMouseDelta();
+			SetShaderValue(shader, point_loc, &point, RL_SHADER_UNIFORM_VEC2);
+		}
 
 		BeginDrawing();
 		
@@ -42,6 +51,8 @@ int main() {
 		rlTexCoord2f(viewport_rect.x + viewport_rect.width, viewport_rect.y); rlVertex2f(window_width, 0.0f);
 
 		EndShaderMode();
+		
+		DrawCircleV(GetWorldToScreen2D(point,viewport), 3.0f, BLUE);
 		
 		EndDrawing();
 	}

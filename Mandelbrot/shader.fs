@@ -3,6 +3,9 @@
 // Input texture coords
 in vec2 fragTexCoord;
 
+// Uniforms
+uniform vec2 point;
+
 // Output color
 out vec4 finalColor;
 
@@ -12,13 +15,14 @@ vec2 complex_square(vec2 z) {
 }
 
 float mandelbrot(vec2 c) {
-    vec2 z = c;
+    vec2 z = point;
     int i;
     for(i = 0; i < iterations; i++) {
         if(length(z) > 4) break;
         z = complex_square(z) + c;
     }
-    return distance(z,c);
+    if(i==iterations) return 0.0;
+    return i / iterations;
 }
 
 void main() {
