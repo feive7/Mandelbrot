@@ -23,6 +23,6 @@ int mandelbrot(vec2 c) {
 }
 
 void main() {
-    float value = mandelbrot(fragTexCoord) / iterations;
+    float value = sqrt(mandelbrot(fragTexCoord) / iterations);
     finalColor = vec4(value,value,value,1.0);
 }
