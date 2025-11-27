@@ -135,6 +135,9 @@
   <ItemGroup>
     <ClCompile Include="Mandelbrot.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="shader.fs" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

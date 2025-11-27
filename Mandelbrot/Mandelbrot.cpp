@@ -1,5 +1,6 @@
 #include <iostream>
 #include <raylib.h>
+#include <rlgl.h>
 
 int main() {
 	// Define window dimensions
@@ -10,11 +11,26 @@ int main() {
 	InitWindow(window_width, window_height, "Raylib");
 	SetTargetFPS(60);
 
+	// Load shader
+	Shader shader = LoadShader(NULL, "./shader.fs");
+
 	// Game loop
 	while (!WindowShouldClose()) {
 		BeginDrawing();
+		
 		ClearBackground(RAYWHITE);
-		DrawText("Hello World!", 5, 5, 20, BLACK);
+		
+		BeginShaderMode(shader);
+		
+		rlBegin(RL_QUADS);
+		
+		rlTexCoord2f(0.0f, 0.0f); rlVertex2f(0.0f, 0.0f);
+		rlTexCoord2f(0.0f, 1.0f); rlVertex2f(0.0f, window_height);
+		rlTexCoord2f(1.0f, 1.0f); rlVertex2f(window_width, window_height);
+		rlTexCoord2f(1.0f, 0.0f); rlVertex2f(window_width, 0.0f);
+
+		EndShaderMode();
+		
 		EndDrawing();
 	}
 
