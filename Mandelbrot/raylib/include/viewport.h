@@ -40,6 +40,7 @@ public:
 			// Uses log scaling to provide consistent zoom speed
 			float scale = 0.2f * wheel;
 			zoom = expf(logf(zoom) + scale);
+			zoom = Clamp(zoom, 0.0f, 1200000.0f);
 			just_moved = true;
 		}
 		if(just_moved || override_move_check) updateRectangle();

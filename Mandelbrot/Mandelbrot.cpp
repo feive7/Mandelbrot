@@ -36,6 +36,10 @@ int main() {
 			point += viewport.getMouseDelta();
 			SetShaderValue(shader, point_loc, &point, RL_SHADER_UNIFORM_VEC2);
 		}
+		if (IsKeyDown(KEY_R)) {
+			point = { 0.0f,0.0f }; // Reset point to 0,0
+			SetShaderValue(shader, point_loc, &point, RL_SHADER_UNIFORM_VEC2);
+		}
 
 		BeginDrawing();
 		
