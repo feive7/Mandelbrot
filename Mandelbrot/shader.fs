@@ -6,6 +6,7 @@ in vec2 fragTexCoord;
 
 // Uniforms
 uniform vec2 point;
+uniform int mouse_buttons;
 
 // Output color
 out vec4 finalColor;
@@ -119,8 +120,9 @@ vec3 palette(vec4 result) {
 
 
 void main() {
-    vec4 result = mandelbrot(fragTexCoord);
-    vec3 color = palette(result);
+    //vec4 result = mandelbrot(fragTexCoord);
+    //vec3 color = palette(result);
+    vec3 color = vec3(mouse_buttons & 1, mouse_buttons & 2, mouse_buttons & 4);
     finalColor = vec4(color,1.0);
 }
                      

@@ -17,6 +17,7 @@ int main() {
 	// Load shader
 	Shader shader = LoadShader(NULL, "./shader.fs");
 	int point_loc = GetShaderLocation(shader, "point");
+	int mouse_buttons_loc = GetShaderLocation(shader, "mouse_buttons");
 
 	// Viewport
 	Viewport viewport;
@@ -32,11 +33,14 @@ int main() {
 		viewport.update();
 		Rectangle viewport_rect = viewport.getRectangle();
 
-		if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
+		int mouse_buttons = IsMouseButtonDown(MOUSE_BUTTON_LEFT) + 2 * IsMouseButtonDown(MOUSE_BUTTON_RIGHT) + 4 * IsMouseButtonDown(MOUSE_BUTTON_MIDDLE); // Get mouse button bitmask
+		SetShaderValue(shader, mouse_buttons_loc, &mouse_buttons, RL_SHADER_UNIFORM_INT); // Send bitmask
+
+		if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) { // Drag point
 			point += viewport.getMouseDelta();
 			SetShaderValue(shader, point_loc, &point, RL_SHADER_UNIFORM_VEC2);
 		}
-		if (IsKeyDown(KEY_R)) {
+		if (IsKeyDown(KEY_R)) { // Reset viewport
 			point = { 0.0f,0.0f }; // Reset point to 0,0
 			SetShaderValue(shader, point_loc, &point, RL_SHADER_UNIFORM_VEC2);
 		}
