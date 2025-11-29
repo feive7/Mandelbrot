@@ -1,6 +1,7 @@
 #version 330
 #define iterations 1000.0
 #define PI 3.141592654
+#define ESCAPE_RADIUS 70
 // Input texture coords
 in vec2 fragTexCoord;
 
@@ -21,6 +22,7 @@ out vec4 finalColor;
 #define cx_sin(a) vec2(sin(a.x) * cosh(a.y), cos(a.x) * sinh(a.y))
 #define cx_cos(a) vec2(cos(a.x) * cosh(a.y), -sin(a.x) * sinh(a.y))
 #define cx_abs(a) vec2(abs(a.x),abs(a.y))
+#define cx_exp(a) vec2(exp(a.x)*sin(a.y),exp(a.x)*cos(a.y))
 
 vec2 cx_sqrt(vec2 a) {
     float r = length(a);
@@ -103,8 +105,8 @@ vec3 domainColoring (vec2 z) {
 vec4 mandelbrot(vec2 z, vec2 c) {
     int i;
     for(i = 0; i < iterations; i++) {
-        if(length(z) > 4) break;
-        z = cx_square(cx_abs(z)) + c;
+        if(length(z) > ESCAPE_RADIUS) break;
+        z = cx_z_squared_plus_c(z,c);
     }
     return vec4(z,float(i),(i==iterations));
 }
@@ -127,9 +129,11 @@ vec3 palette(vec4 result) {
 
 
 void main() {
-    vec4 m_result = mandelbrot(vec2(0.0), fragTexCoord);
+    vec2 z = fragTexCoord;
+
+    vec4 m_result = mandelbrot(vec2(0.0), z);
     vec3 m_color = palette(m_result);
-    vec4 j_result = mandelbrot(fragTexCoord,point);
+    vec4 j_result = mandelbrot(z,point);
     vec3 j_color = palette(j_result);
     if(julia_toggle == 1) {
         finalColor = vec4(j_color,1.0);
