@@ -18,6 +18,7 @@ int main() {
 	Shader shader = LoadShader(NULL, "./shader.fs");
 	int point_loc = GetShaderLocation(shader, "point");
 	int mouse_buttons_loc = GetShaderLocation(shader, "mouse_buttons");
+	int julia_toggle_loc = GetShaderLocation(shader, "julia_toggle");
 
 	// Viewport
 	Viewport viewport;
@@ -27,6 +28,7 @@ int main() {
 
 	// Movable point vector
 	Vector2 point = { 0.0f,0.0f };
+	int show_julia = 0; // Controller for julia_toggle uniform
 	
 	// Game loop
 	while (!WindowShouldClose()) {
@@ -43,6 +45,10 @@ int main() {
 		if (IsKeyDown(KEY_R)) { // Reset viewport
 			point = { 0.0f,0.0f }; // Reset point to 0,0
 			SetShaderValue(shader, point_loc, &point, RL_SHADER_UNIFORM_VEC2);
+		}
+		if (IsKeyPressed(KEY_J)) { // Reset viewport
+			show_julia = 1 - show_julia;
+			SetShaderValue(shader, julia_toggle_loc, &show_julia, RL_SHADER_UNIFORM_INT);
 		}
 
 		BeginDrawing();

@@ -7,6 +7,7 @@ in vec2 fragTexCoord;
 // Uniforms
 uniform vec2 point;
 uniform int mouse_buttons;
+uniform int julia_toggle;
 
 // Output color
 out vec4 finalColor;
@@ -19,6 +20,7 @@ out vec4 finalColor;
 #define cx_arg(a) atan(a.y, a.x)
 #define cx_sin(a) vec2(sin(a.x) * cosh(a.y), cos(a.x) * sinh(a.y))
 #define cx_cos(a) vec2(cos(a.x) * cosh(a.y), -sin(a.x) * sinh(a.y))
+#define cx_abs(a) vec2(abs(a.x),abs(a.y))
 
 vec2 cx_sqrt(vec2 a) {
     float r = length(a);
@@ -68,7 +70,13 @@ vec3 hsv2rgb(vec3 c) {
 }
 
 // Domain coloring
-vec3 domainColoring (vec2 z, vec2 gridSpacing, float saturation, float gridStrength, float magStrength, float linePower) {
+vec3 domainColoring (vec2 z) {
+  float saturation = 0.9;
+  float gridStrength = 0.5;
+  float magStrength = 0.7;
+  vec2 gridSpacing = vec2(1.0,1.0);
+  float linePower = 8.0;
+
   float carg = atan(z.y, z.x);
   float cmod = length(z);
 
@@ -92,12 +100,11 @@ vec3 domainColoring (vec2 z, vec2 gridSpacing, float saturation, float gridStren
   return rgb;
 }
 
-vec4 mandelbrot(vec2 c) {
-    vec2 z = point;
+vec4 mandelbrot(vec2 z, vec2 c) {
     int i;
     for(i = 0; i < iterations; i++) {
         if(length(z) > 4) break;
-        z = cx_square(z) + c;
+        z = cx_square(cx_abs(z)) + c;
     }
     return vec4(z,float(i),(i==iterations));
 }
@@ -120,9 +127,18 @@ vec3 palette(vec4 result) {
 
 
 void main() {
-    //vec4 result = mandelbrot(fragTexCoord);
-    //vec3 color = palette(result);
-    vec3 color = vec3(mouse_buttons & 1, mouse_buttons & 2, mouse_buttons & 4);
-    finalColor = vec4(color,1.0);
+    vec4 m_result = mandelbrot(vec2(0.0), fragTexCoord);
+    vec3 m_color = palette(m_result);
+    vec4 j_result = mandelbrot(fragTexCoord,point);
+    vec3 j_color = palette(j_result);
+    if(julia_toggle == 1) {
+        finalColor = vec4(j_color,1.0);
+    }
+    else if (mouse_buttons == 2) {
+        finalColor = vec4(mix(j_color,m_color,0.5),1.0);
+    }
+    else {
+        finalColor = vec4(m_color,1.0);
+    }
 }
                      
