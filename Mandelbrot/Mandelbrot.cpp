@@ -66,7 +66,7 @@ int main() {
 
 		EndShaderMode();
 		
-		DrawCircleV(GetWorldToScreen2D(point,viewport), 3.0f, BLUE);
+		if(!show_julia) DrawCircleV(GetWorldToScreen2D(point,viewport), 3.0f, BLUE);
 		
 		EndDrawing();
 	}
