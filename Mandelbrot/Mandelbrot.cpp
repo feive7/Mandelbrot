@@ -3,6 +3,7 @@
 #include <rlgl.h>
 #include <raymath.h>
 
+#include "mandelbrot_fs.h"
 #include "viewport.h"
 
 int main() {
@@ -15,7 +16,8 @@ int main() {
 	SetTargetFPS(60);
 
 	// Load shader
-	Shader shader = LoadShader(NULL, "./shader.fs");
+	//Shader shader = LoadShader(NULL, "./shader.fs");
+	Shader shader = LoadShaderFromMemory(NULL, mandelbrot_fs);
 	int point_loc = GetShaderLocation(shader, "point");
 	int mouse_buttons_loc = GetShaderLocation(shader, "mouse_buttons");
 	int julia_toggle_loc = GetShaderLocation(shader, "julia_toggle");
