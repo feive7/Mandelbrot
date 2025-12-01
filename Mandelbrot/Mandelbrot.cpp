@@ -6,6 +6,21 @@
 #include "mandelbrot_fs.h"
 #include "viewport.h"
 
+std::string Complex2String(Vector2 z) {
+	char sign = (z.y < 0 ? '-' : '+');
+	std::string output = TextFormat("%f%c%fi", z.x, sign, abs(z.y));
+	return output;
+}
+void UpdateWindowTitle(int show_julia, Vector2 point) {
+	if (show_julia) { // Showing Julia set
+		std::string title = Complex2String(point);
+		SetWindowTitle(("Julia Viewer c=" + title).c_str());
+	}
+	else { // Showing Mandelbrot set
+		SetWindowTitle("Mandelbrot Viewer");
+	}
+}
+
 int main() {
 	// Define window dimensions
 	const int window_width = 600;
@@ -43,6 +58,7 @@ int main() {
 		if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) { // Drag point
 			point += viewport.getMouseDelta();
 			SetShaderValue(shader, point_loc, &point, RL_SHADER_UNIFORM_VEC2);
+			UpdateWindowTitle(show_julia, point);
 		}
 		if (IsKeyDown(KEY_R)) { // Reset viewport
 			point = { 0.0f,0.0f }; // Reset point to 0,0
@@ -50,6 +66,8 @@ int main() {
 		}
 		if (IsKeyPressed(KEY_J)) { // Reset viewport
 			show_julia = 1 - show_julia;
+			//SetWindowTitle((show_julia ? "Julia Viewer" : "Mandelbrot Viewer"));
+			UpdateWindowTitle(show_julia, point);
 			SetShaderValue(shader, julia_toggle_loc, &show_julia, RL_SHADER_UNIFORM_INT);
 		}
 
