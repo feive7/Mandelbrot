@@ -12,7 +12,7 @@ int main() {
 	const int window_height = 600;
 
 	// Create window and GL context
-	InitWindow(window_width, window_height, "Raylib");
+	InitWindow(window_width, window_height, "Mandelbrot viewer");
 	SetTargetFPS(60);
 
 	// Load shader
