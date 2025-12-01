@@ -8,8 +8,8 @@
 
 int main() {
 	// Define window dimensions
-	const int window_width = 400;
-	const int window_height = 400;
+	const int window_width = 600;
+	const int window_height = 600;
 
 	// Create window and GL context
 	InitWindow(window_width, window_height, "Raylib");
@@ -24,7 +24,7 @@ int main() {
 
 	// Viewport
 	Viewport viewport;
-	viewport.offset = { 300.0f,200.0f };
+	viewport.offset = { window_width / 2 + 100,window_height / 2 };
 	viewport.zoom = 200.0f;
 	viewport.updateRectangle();
 
