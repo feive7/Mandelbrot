@@ -4,3 +4,6 @@ Left Click + Drag: Pan</br>
 Mouse Wheel: zoom</br>
 Right Click + Drag: Move Julia c value</br>
 J: switch between Mandelbrot and Julia display</br>
+
+# Installation
+Have raylib installed, and run `cmake ./`
